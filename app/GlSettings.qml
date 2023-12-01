@@ -23,15 +23,11 @@ import Alpine
 
 import "components"
 
-SetPanel {
+SettingsPanel {
 
     function update_control_values() {
         let conf = map.shared_config;
-        wireframe_mode.currentIndex = conf.wireframe_mode;
         normal_mode.currentIndex = conf.normal_mode;
-        curtain_settings_mode.currentIndex = conf.curtain_settings.x;
-        curtain_settings_height_mode.currentIndex = conf.curtain_settings.y;
-        curtain_settings_height_reference.value = conf.curtain_settings.z;
         height_lines_enabled.checked = conf.height_lines_enabled;
         phong_enabled.checked = conf.phong_enabled;
         sun_light_color.color = Qt.rgba(conf.sun_light.x, conf.sun_light.y, conf.sun_light.z, conf.sun_light.w);
@@ -102,10 +98,19 @@ SetPanel {
         }
 
         Label {
+            visible: overlay_mode.currentValue > 0 && overlay_mode.currentValue < 100 && snow_enabled.checked
+            text: "This overlay does not work in combination with the snow cover activated!"
+            color: "red"
+            wrapMode: Text.WordWrap
+            Layout.preferredWidth: parent.width
+            Layout.columnSpan: 2
+        }
+
+        Label {
             text: "Strength:"
             visible: overlay_strength.visible;
         }
-        ValSlider {
+        LabledSlider {
             id: overlay_strength;
             from: 0.0; to: 1.0; stepSize:  0.01;
             visible: overlay_mode.currentValue > 0
@@ -121,15 +126,6 @@ SetPanel {
             onCheckStateChanged: map.shared_config.overlay_postshading_enabled = this.checked;
         }
 
-        Label { text: "Wireframe:" }
-        ComboBox {
-            id: wireframe_mode;
-            Layout.fillWidth: true;
-            model: ["disabled", "with shading", "white"];
-            currentIndex: 0; // Init with 0 necessary otherwise onCurrentIndexChanged gets emited on startup (because def:-1)!
-            onCurrentIndexChanged:  map.shared_config.wireframe_mode = currentIndex;
-        }
-
         Label { text: "Normals:" }
         ComboBox {
             id: normal_mode;
@@ -137,35 +133,6 @@ SetPanel {
             model: ["per Fragment", "Finite-Difference"];
             currentIndex: 0; // Init with 0 necessary otherwise onCurrentIndexChanged gets emited on startup (because def:-1)!
             onCurrentIndexChanged:  map.shared_config.normal_mode = currentIndex;
-        }
-
-    }
-
-    CheckGroup {
-        name: "Curtains"
-        Label { text: "Mode:" }
-        ComboBox {
-            id: curtain_settings_mode;
-            Layout.fillWidth: true;
-            model: ["Off", "Normal", "Highlighted", "Hide Rest"]
-            currentIndex: 0; // Init with 0 necessary otherwise onCurrentIndexChanged gets emited on startup (because def:-1)!
-            onCurrentIndexChanged:  map.shared_config.curtain_settings.x = currentIndex;
-        }
-
-        Label { text: "Height:" }
-        ComboBox {
-            id: curtain_settings_height_mode;
-            Layout.fillWidth: true;
-            model: ["Fixed", "Automatic"];
-            currentIndex: 0; // Init with 0 necessary otherwise onCurrentIndexChanged gets emited on startup (because def:-1)!
-            onCurrentIndexChanged:  map.shared_config.curtain_settings.y = currentIndex;
-        }
-
-        Label { text: "Ref.-Height:" }
-        ValSlider {
-            id: curtain_settings_height_reference;
-            from: 1.0; to: 500.0; stepSize: 1.0;
-            onMoved: map.shared_config.curtain_settings.z = this.value;
         }
     }
 
@@ -183,7 +150,7 @@ SetPanel {
         onCheckedChanged: map.shared_config.snow_settings_angle.x = this.checked;
 
         Label { text: "Angle:" }
-        ValRangeSlider {
+        LabledRangeSlider {
             id: snow_settings_angle;
             from: 0.0; to: 90.0; stepSize: 0.1;
             first.onMoved: map.shared_config.snow_settings_angle.y = this.first.value;
@@ -191,35 +158,35 @@ SetPanel {
         }
 
         Label { text: "Angle Blend:" }
-        ValSlider {
+        LabledSlider {
             id: snow_settings_angle_blend;
             from: 0.0; to: 90.0; stepSize: 0.01;
             onMoved: map.shared_config.snow_settings_angle.w = this.value;
         }
 
         Label { text: "Snow-Line:" }
-        ValSlider {
+        LabledSlider {
             id: snow_settings_alt_min;
             from: 0.0; to: 4000.0; stepSize: 1.0;
             onMoved: map.shared_config.snow_settings_alt.x = this.value;
         }
 
         Label { text: "Snow-Line Variation:" }
-        ValSlider {
+        LabledSlider {
             id: snow_settings_alt_var;
             from: 0.0; to: 1000.0; stepSize: 1.0;
             onMoved: map.shared_config.snow_settings_alt.y = this.value;
         }
 
         Label { text: "Snow-Line Blend:" }
-        ValSlider {
+        LabledSlider {
             id: snow_settings_alt_blend;
             from: 0.0; to: 1000.0; stepSize: 1.0;
             onMoved: map.shared_config.snow_settings_alt.z = this.value;
         }
 
         Label { text: "Snow Specular:" }
-        ValSlider {
+        LabledSlider {
             id: snow_settings_specular;
             from: 0.0; to: 5.0; stepSize: 0.1;
             onMoved: map.shared_config.snow_settings_alt.w = this.value;
@@ -284,21 +251,21 @@ SetPanel {
         onCheckedChanged: map.shared_config.ssao_enabled = this.checked;
 
         Label { text: "Kernel-Size:" }
-        ValSlider {
+        LabledSlider {
             id: ssao_kernel;
             from: 5; to: 64; stepSize: 1;
             onMoved: map.shared_config.ssao_kernel = value;
         }
 
         Label { text: "Falloff-To:" }
-        ValSlider {
+        LabledSlider {
             id: ssao_falloff_to_value;
             from: 0.0; to: 1.0; stepSize: 0.01;
             onMoved: map.shared_config.ssao_falloff_to_value = value;
         }
 
         Label { text: "Blur-Size:" }
-        ValSlider {
+        LabledSlider {
             id: ssao_blur_kernel_size;
             from: 0; to: 2; stepSize: 1; snapMode: Slider.SnapAlways;
             onMoved: map.shared_config.ssao_blur_kernel_size = value;

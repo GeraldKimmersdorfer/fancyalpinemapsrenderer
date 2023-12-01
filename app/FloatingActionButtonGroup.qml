@@ -1,6 +1,7 @@
 /*****************************************************************************
  * Alpine Terrain Renderer
  * Copyright (C) 2023 Adam Celarek
+ * Copyright (C) 2023 Gerald Kimmersdorfer
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,21 +58,21 @@ ColumnLayout {
         }
     }
 
-    FAButton {
+    FloatingActionButton {
         rotation: map.camera_rotation_from_north
         image: "../icons/material/navigation_offset.svg"
         onClicked: map.rotate_north()
         size: parent.width
     }
 
-    FAButton {
+    FloatingActionButton {
         id: fab_location
         image: checked ?  "../icons/material/my_location.svg" : "../icons/material/location_searching.svg"
         checkable: true
         size: parent.width
     }
 
-    FAButton {
+    FloatingActionButton {
         id: fab_presets
         image: checked ? "../icons/material/chevron_left.svg" : "../icons/material/format_paint.svg"
         size: parent.width
@@ -92,9 +93,9 @@ ColumnLayout {
                 spacing: 0
                 height: parent.height
 
-                FAButton {
+                FloatingActionButton {
                     image: "../icons/presets/basic.png"
-                    onClicked: map.set_gl_preset("AAABVHjaY2BgYLL_wAAGGPRhY2EHIL3_1sRPCSD-6yYtMP8y37QHDAiAU__NmTMXgOgHDAIMWGi4_h8Q2oGDAQU4OGA31yGTAS9wsIPSIlC63wFFH4yGm_sAlSYBKAAxIxTDAQAHqCOM")
+                    onClicked: map.set_gl_preset("AAABIHjaY2BgYLL_wAAGGPRhY2EHEP303YEDIPrZPr0FQHr_EU-HBAYEwKn_5syZIPX2DxgEGLDQcP0_ILQDBwMKcHBgwAoc7KC0CJTuhyh0yGRAoeHueIBK4wAKQMwIxXAAAFQuIIw")
                     size: parent.height
                     image_size: 42
                     image_opacity: 1.0
@@ -103,9 +104,9 @@ ColumnLayout {
                     ToolTip.text: qsTr("BASIC-Preset: Fast with no shading")
                 }
 
-                FAButton {
+                FloatingActionButton {
                     image: "../icons/presets/shaded.png"
-                    onClicked: map.set_gl_preset("AAABVHjaY2BgYLL_wAAGGPSRapEGIL3_1sRPCSD-6yYtBxD_Mt-0BwwIgFP_HY07CiD6AYMAAxYarv8HhHbgYEABDg7YzXXIZMALHOygtAiU7ndA0Qej4eY-QKWxAEY0GsZWgNIo8gALIiNv")
+                    onClicked: map.set_gl_preset("AAABIHjaY2BgYLL_wAAGGPRhY2EHEP1s0rwEMG32D0TvPxS4yIEBAXDqvzlz5gIQ_YBBgAELDdf_A0I7cDCgAAcHBqzAwQ5Ki0DpfohCh0wGFBrujgeoNBAwQjEyXwFNHEwDAMaIIAM")
                     size: parent.height
                     image_size: 42
                     image_opacity: 1.0
@@ -114,9 +115,9 @@ ColumnLayout {
                     ToolTip.text: qsTr("SHADED-Preset: Shading + SSAO + CSM")
                 }
 
-                FAButton {
+                FloatingActionButton {
                     image: "../icons/presets/snow.png"
-                    onClicked: map.set_gl_preset("AAABVHjaY2BgYLL_wAAGGPRhY2EHIL3_1sQLB0D8101mIPH9l_maExgQAKf-mzNnLgDRDxgEGLDQcP0_ILQDBwMKcHDAbq5DJqo6mDhcnx2UFoHS_Q4o-mA03NwHqDQWwIhGw9gKUBpFHgAbsyQ2")
+                    onClicked: map.set_gl_preset("AAABIHjaY2BgYLL_wAAGGPRhY2EHEP1s0rwEMG32D0TvPxS4yIEBAXDqvzlz5gIQ_YBBgAELDdf_A0I7cDCgAAcHVPPg4nZQWgRK90MUOmQyoNBwdzxApYGAEYqR-Qpo4mAaAFhrITI")
                     size: parent.height
                     image_size: 42
                     image_opacity: 1.0
