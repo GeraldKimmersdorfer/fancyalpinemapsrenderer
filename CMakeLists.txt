@@ -93,6 +93,7 @@ add_subdirectory(nucleus)
 add_subdirectory(gl_engine)
 add_subdirectory(plain_renderer)
 add_subdirectory(app)
+add_subdirectory(webgpu)
 
 if (ALP_UNITTESTS)
     add_subdirectory(unittests)
