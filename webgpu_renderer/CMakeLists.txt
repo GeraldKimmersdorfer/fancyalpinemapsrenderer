@@ -17,17 +17,47 @@
 #############################################################################
 
 cmake_minimum_required(VERSION 3.24)
-project(alpine-renderer-webgpu_renderer LANGUAGES CXX)
+project(alpine-renderer-webgpu_renderer LANGUAGES CXX C)
 
 qt_add_executable(webgpu_renderer
     main.cpp
-    Window.h Window.cpp
+    save_image.h
+    stb_image_write.h
 )
+
+set_target_properties(webgpu_renderer PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+    COMPILE_WARNING_AS_ERROR ON
+)
+
+
+#if (MSVC)
+#    target_compile_options(webgpu_renderer PRIVATE /W4)
+#else()
+#    target_compile_options(webgpu_renderer PRIVATE -Wall -Wextra -pedantic)
+#endif()
+
+if(XCODE)
+    set_target_properties(webgpu_renderer PROPERTIES
+        XCODE_GENERATE_SCHEME ON
+        XCODE_SCHEME_ENABLE_GPU_FRAME_CAPTURE_MODE "Metal")
+endif()
+
 set_target_properties(webgpu_renderer PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
 )
-target_link_libraries(webgpu_renderer PUBLIC gl_engine)
+
+#target_link_libraries(webgpu_renderer PRIVATE glfw)
+add_subdirectory(webgpu)
+#add_subdirectory(glfw)
+#add_subdirectory(glfw3webgpu)
+#target_link_libraries(webgpu_renderer PRIVATE webgpu glfw glfw3webgpu)
+target_link_libraries(webgpu_renderer PRIVATE webgpu)
+
+target_copy_webgpu_binaries(webgpu_renderer)
+
 target_include_directories(webgpu_renderer PRIVATE .)
 
 qt_add_resources(webgpu_renderer "height_data"
@@ -50,5 +80,12 @@ if (EMSCRIPTEN)
         list(APPEND ALP_INSTALL_FILES "$<TARGET_FILE_DIR:webgpu_renderer>/webgpu_renderer.worker.js")
     endif()
     install(FILES ${ALP_INSTALL_FILES} DESTINATION ${ALP_WWW_INSTALL_DIR})
+
+    # Add Emscripten-specific link options
+    target_link_options(webgpu_renderer PRIVATE
+        -sUSE_GLFW=3 # Use Emscripten-provided GLFW
+        -sUSE_WEBGPU # Handle WebGPU symbols
+        -sASYNCIFY # Required by WebGPU-C++
+    )
 
 endif()
