@@ -82,6 +82,7 @@ include(cmake/alp_add_git_repository.cmake)
 alp_add_git_repository(renderer_static_data URL https://github.com/AlpineMapsOrg/renderer_static_data.git COMMITISH origin/main DO_NOT_ADD_SUBPROJECT)
 alp_add_git_repository(alpineapp_fonts URL https://github.com/AlpineMapsOrg/fonts.git COMMITISH origin/main DO_NOT_ADD_SUBPROJECT)
 alp_add_git_repository(doc URL https://github.com/AlpineMapsOrg/documentation.git COMMITISH origin/main DO_NOT_ADD_SUBPROJECT DESTINATION_PATH doc)
+#alp_add_git_repository(glfw URL https://github.com/glfw/glfw.git COMMITISH origin/master DO_NOT_ADD_SUBPROJECT)
 
 
 if (ANDROID)
@@ -91,9 +92,10 @@ endif()
 
 add_subdirectory(nucleus)
 add_subdirectory(gl_engine)
+add_subdirectory(webgpu_engine)
 add_subdirectory(plain_renderer)
+add_subdirectory(webgpu_renderer)
 add_subdirectory(app)
-add_subdirectory(webgpu)
 
 if (ALP_UNITTESTS)
     add_subdirectory(unittests)
